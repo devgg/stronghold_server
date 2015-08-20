@@ -4,28 +4,17 @@ project(stronghold_server CXX)
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(SOURCE_DIR 	${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-set(SHARED_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/shared/include)
-set(SHARED_SOURCE_DIR 	${CMAKE_CURRENT_SOURCE_DIR}/libs/shared/src)
-
-
-file(GLOB INCLUDES ${INCLUDE_DIR}/*.hpp ${SHARED_INCLUDE_DIR}/*.hpp)
-file(GLOB SOURCES ${SOURCE_DIR}/*.cpp ${SHARED_SOURCE_DIR}/*.cpp)
+file(GLOB INCLUDES ${INCLUDE_DIR}/*.hpp)
+file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
  
 include_directories(stronghold_server ${INCLUDE_DIR} ${SHARED_INCLUDE_DIR})
 add_executable(stronghold_server ${SOURCES} ${INCLUDES})
 
 
-#add_subdirectory(libs/shared)
+add_subdirectory(libs/shared)
+target_include_directories(stronghold_server PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs/shared/include)
+target_link_libraries (stronghold_server stronghold_shared)
 
-
-
-
-# Locate Boost libraries: unit_test_framework, date_time and regex
-#set(BOOST_ROOT /opt/local/include/boost)
-#set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.55 REQUIRED system serialization)
 
 set (EXTRA_COMPILE_FLAGS "-Wall -Werror")
 
@@ -44,11 +33,15 @@ else (WIN32)
 endif (WIN32)
 
 
-# We need boost includes
-target_include_directories(stronghold_server PRIVATE ${Boost_INCLUDE_DIRS})
+##### boost #####
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost 1.55 REQUIRED system)
 
-# We need boost libraries
+target_include_directories(stronghold_server PRIVATE ${Boost_INCLUDE_DIRS})
 target_link_libraries(stronghold_server ${Boost_LIBRARIES})
+##### \boost #####
+
 
 # Tell MSVC not to warn us about unchecked iterators in debug builds
 if(${MSVC})
