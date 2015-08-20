@@ -14,9 +14,9 @@
 #include <atomic>
 #include <memory>
 
-#include "tcp_connection.h"
-#include "gateway.h"
-#include "relay.h"
+#include "tcp_connection.hpp"
+#include "gateway.hpp"
+#include "relay.hpp"
 
 
 namespace communication {

@@ -6,7 +6,7 @@
 //
 //
 
-#include "game.h"
+#include "game.hpp"
 #include <iostream>
 
 namespace game {

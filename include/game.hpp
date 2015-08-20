@@ -9,9 +9,9 @@
 #ifndef __stronghold_server__game__
 #define __stronghold_server__game__
 
-#include "proxy.h"
-#include "listener.h"
-#include "player.h"
+#include "proxy.hpp"
+#include "listener.hpp"
+#include "player.hpp"
 #include <map>
 
 namespace game {

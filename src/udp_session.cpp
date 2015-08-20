@@ -8,10 +8,10 @@
 
 #include <iostream>
 
-#include "udp_session.h"
-#include "key_event.h"
-#include "client.h"
-#include "deserializer.h"
+#include "udp_session.hpp"
+#include "key_event.hpp"
+#include "client.hpp"
+#include "deserializer.hpp"
 
 namespace cm = communication::message;
 using namespace communication;

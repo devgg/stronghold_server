@@ -16,9 +16,9 @@
 #include <memory>
 #include <iostream>
 
-#include "udp_session.h"
-#include "udp_server.h"
-#include "serializer.h"
+#include "udp_session.hpp"
+#include "udp_server.hpp"
+#include "serializer.hpp"
 
 #include <boost/asio/buffer.hpp>
 

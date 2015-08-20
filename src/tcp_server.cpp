@@ -7,14 +7,14 @@
 //
 
 
-#include "tcp_server.h"
+#include "tcp_server.hpp"
 #include <ctime>
 #include <iostream>
 #include <string>
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/range/adaptor/map.hpp>
-#include "serializer.h"
+#include "serializer.hpp"
 
 namespace communication {
     

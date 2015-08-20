@@ -9,7 +9,7 @@
 #ifndef __stronghold_server__player__
 #define __stronghold_server__player__
 
-#include "client.h"
+#include "client.hpp"
 #include <string>
 
 namespace game {

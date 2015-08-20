@@ -6,15 +6,15 @@
 //
 //
 
-#include "proxy.h"
-#include "key_event.h"
-#include "hello.h"
-#include "welcome.h"
-#include "connect.h"
-#include "disconnect.h"
+#include "proxy.hpp"
+#include "key_event.hpp"
+#include "hello.hpp"
+#include "welcome.hpp"
+#include "connect.hpp"
+#include "disconnect.hpp"
 
-#include "gateway.h"
-#include "listener.h"
+#include "gateway.hpp"
+#include "listener.hpp"
 
 #include <iostream>
 

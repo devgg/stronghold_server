@@ -6,10 +6,10 @@
 //
 //
 
-#include "tcp_connection.h"
-#include "key_event.h"
-#include "client.h"
-#include "deserializer.h"
+#include "tcp_connection.hpp"
+#include "key_event.hpp"
+#include "client.hpp"
+#include "deserializer.hpp"
 
 namespace cm = communication::message;
 using namespace communication;

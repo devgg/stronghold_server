@@ -17,8 +17,8 @@
 #include <map>
 #include <atomic>
 
-#include "gateway.h"
-#include "udp_session.h"
+#include "gateway.hpp"
+#include "udp_session.hpp"
 
 namespace communication {
     

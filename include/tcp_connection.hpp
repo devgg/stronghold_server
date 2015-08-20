@@ -21,10 +21,10 @@
 #include <sstream>
 #include <memory>
 
-#include "message.h"
-#include "relay.h"
-#include "client.h"
-#include "communication.h"
+#include "message.hpp"
+#include "relay.hpp"
+#include "client.hpp"
+#include "communication.hpp"
 
 namespace communication {
     namespace msg = communication::message;

@@ -1,8 +1,24 @@
-# Basic CMake project
-cmake_minimum_required(VERSION 2.8.11)
-
-# Name the project after the exercise
+cmake_minimum_required(VERSION 2.8.3)
 project(stronghold_server CXX)
+
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(SOURCE_DIR 	${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+set(SHARED_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/shared/include)
+set(SHARED_SOURCE_DIR 	${CMAKE_CURRENT_SOURCE_DIR}/libs/shared/src)
+
+
+file(GLOB INCLUDES ${INCLUDE_DIR}/*.hpp ${SHARED_INCLUDE_DIR}/*.hpp)
+file(GLOB SOURCES ${SOURCE_DIR}/*.cpp ${SHARED_SOURCE_DIR}/*.cpp)
+ 
+include_directories(stronghold_server ${INCLUDE_DIR} ${SHARED_INCLUDE_DIR})
+add_executable(stronghold_server ${SOURCES} ${INCLUDES})
+
+
+#add_subdirectory(libs/shared)
+
+
+
 
 # Locate Boost libraries: unit_test_framework, date_time and regex
 #set(BOOST_ROOT /opt/local/include/boost)
@@ -27,13 +43,6 @@ else (WIN32)
     set (CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${EXTRA_COMPILE_FLAGS}")
 endif (WIN32)
 
-# Define source files for this assignment
-FILE(GLOB Sources *.cpp)
-FILE(GLOB Headers *.h)
-ADD_EXECUTABLE (stronghold_server 
-	${Sources}
-	${Headers}
-	)
 
 # We need boost includes
 target_include_directories(stronghold_server PRIVATE ${Boost_INCLUDE_DIRS})

@@ -9,10 +9,10 @@
 #ifndef __stronghold_server__communication_proxy__
 #define __stronghold_server__communication_proxy__
 
-#include "relay.h"
-#include "mediator.h"
-#include "listener.h"
-#include "gateway.h"
+#include "relay.hpp"
+#include "mediator.hpp"
+#include "listener.hpp"
+#include "gateway.hpp"
 #include <memory>
 
 namespace communication {

@@ -15,9 +15,9 @@
 #include <boost/asio.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
-#include "message.h"
-#include "relay.h"
-#include "client.h"
+#include "message.hpp"
+#include "relay.hpp"
+#include "client.hpp"
 
 namespace communication {
     

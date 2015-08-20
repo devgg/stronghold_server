@@ -127,12 +127,10 @@
 #include <string>
 #include <boost/asio.hpp>
 
-#include "tcp_server.h"
-#include "proxy.h"
-#include "game.h"
-#include "client_proxy.h"
-#include "tcp_client.h"
-#include "udp_server.h"
+#include "tcp_server.hpp"
+#include "proxy.hpp"
+#include "game.hpp"
+#include "udp_server.hpp"
 
 
 int main() {
