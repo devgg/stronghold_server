@@ -11,10 +11,6 @@ include_directories(stronghold_server ${INCLUDE_DIR} ${SHARED_INCLUDE_DIR})
 add_executable(stronghold_server ${SOURCES} ${INCLUDES})
 
 
-add_subdirectory(libs/shared)
-target_include_directories(stronghold_server PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs/shared/include)
-target_link_libraries (stronghold_server stronghold_shared)
-
 
 set (EXTRA_COMPILE_FLAGS "-Wall -Werror")
 
@@ -32,19 +28,32 @@ else (WIN32)
     set (CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${EXTRA_COMPILE_FLAGS}")
 endif (WIN32)
 
-
-##### boost #####
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.55 REQUIRED system)
-
-target_include_directories(stronghold_server PRIVATE ${Boost_INCLUDE_DIRS})
-target_link_libraries(stronghold_server ${Boost_LIBRARIES})
-##### \boost #####
-
-
 # Tell MSVC not to warn us about unchecked iterators in debug builds
 if(${MSVC})
     set_target_properties(stronghold_server PROPERTIES
         COMPILE_DEFINITIONS_DEBUG _SCL_SECURE_NO_WARNINGS)
 endif()
+
+
+#### stronghold_shared ####
+add_subdirectory(libs/shared)
+### \stronghold_shared ####
+
+
+##### boost #####
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost 1.55 REQUIRED system)
+#### \boost #####
+
+
+#### import ####
+target_include_directories(stronghold_server PRIVATE 
+	${STRONGHOLD_SHARED_INCLUDE_DIR}
+	${Boost_INCLUDE_DIRS}
+)
+target_link_libraries(stronghold_server 
+	stronghold_shared
+	${Boost_LIBRARIES}
+)
+### \import ####
