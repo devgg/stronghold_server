@@ -48,7 +48,7 @@ find_package(Boost 1.55 REQUIRED system)
 
 #### import ####
 target_include_directories(stronghold_server PRIVATE 
-    ${INCLUDE_DIR}
+    	${INCLUDE_DIR}
 	${STRONGHOLD_SHARED_INCLUDE_DIR}
 	${Boost_INCLUDE_DIRS}
 )
