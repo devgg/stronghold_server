@@ -7,7 +7,6 @@ set(SOURCE_DIR 	${CMAKE_CURRENT_SOURCE_DIR}/src)
 file(GLOB INCLUDES ${INCLUDE_DIR}/*.hpp)
 file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
  
-include_directories(stronghold_server ${INCLUDE_DIR} ${SHARED_INCLUDE_DIR})
 add_executable(stronghold_server ${SOURCES} ${INCLUDES})
 
 
@@ -49,6 +48,7 @@ find_package(Boost 1.55 REQUIRED system)
 
 #### import ####
 target_include_directories(stronghold_server PRIVATE 
+    ${INCLUDE_DIR}
 	${STRONGHOLD_SHARED_INCLUDE_DIR}
 	${Boost_INCLUDE_DIRS}
 )
