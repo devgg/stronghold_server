@@ -122,17 +122,16 @@
 
 
 
-#include <ctime>
 #include <iostream>
-#include <string>
 #include <boost/asio.hpp>
 
-#include "tcp_server.hpp"
-#include "proxy.hpp"
-#include "game.hpp"
+#include "object_pool.hpp"
 #include "udp_server.hpp"
-#include "udp_server2.hpp"
 
+
+namespace communication{
+	class udp_receiver;
+}
 
 int main() {
     
@@ -175,12 +174,11 @@ int main() {
 
 	try {
 		boost::asio::io_service io_service;
-
-		com::udp_server2 server(io_service);
+		std::shared_ptr<object_pool<boost::asio::streambuf>> streambuffer_pool = std::make_shared<object_pool<boost::asio::streambuf>>(100);
+		communication::udp_server udp_server(io_service, streambuffer_pool, 1337, 1338);
 
 
 		io_service.run();
-
 	}
 	catch (std::exception& e) {
 		std::cerr << e.what() << std::endl;

@@ -29,7 +29,7 @@ auto proxy::relay_message(shared_ptr<msg::message> m, client c) -> void {
             shared_ptr<msg::hello> hello = static_pointer_cast<msg::hello>(m);
             std::cout << *hello << std::endl;
             listener.lock()->client_connected(hello->get_username(), c);
-            gateway.lock()->send(make_shared<msg::welcome>(c), c);
+//            gateway.lock()->send(make_shared<msg::welcome>(c), c);
             break;
         }
             
@@ -66,7 +66,7 @@ auto proxy::relay_message(shared_ptr<msg::message> m, client c) -> void {
 }
 
 auto proxy::key_event(constants::key key, constants::event event, client c) -> void {
-    gateway.lock()->broadcast(make_shared<msg::key_event>(key, event, c));
+//    gateway.lock()->broadcast(make_shared<msg::key_event>(key, event, c));
 }
 
 auto proxy::update_listener() -> void {
