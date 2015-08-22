@@ -24,14 +24,14 @@ namespace communication {
 		receive_socket.async_receive_from(streambuf->prepare(1000), receive_endpoint, boost::bind(&udp_server::handle_receive, this, streambuf, _1, _2));
 	}
 
-	void udp_server::unicast(const boost::asio::ip::udp::endpoint& endpoint, const boost::asio::streambuf& data) {
-		send_socket.async_send_to(data.data(), endpoint, boost::bind(&udp_server::handle_unicast, this, _1, _2));
+	void udp_server::unicast(const boost::asio::ip::udp::endpoint& endpoint, boost::asio::streambuf* streambuf) {
+		send_socket.async_send_to(streambuf->data(), endpoint, boost::bind(&udp_server::handle_unicast, this, _1, _2));
 	}
 
-	void udp_server::multicast(const std::vector<boost::asio::ip::udp::endpoint>& endpoints, const boost::asio::streambuf& data) {
+	void udp_server::multicast(const std::vector<boost::asio::ip::udp::endpoint>& endpoints, boost::asio::streambuf* streambuf) {
 		std::atomic<size_t>* counter = new std::atomic<size_t>(0);
 		for (const boost::asio::ip::udp::endpoint& endpoint : endpoints) {
-			send_socket.async_send_to(data.data(), endpoint, boost::bind(&udp_server::handle_multicast, this, counter, endpoints.size(), _1, _2));
+			send_socket.async_send_to(streambuf->data(), endpoint, boost::bind(&udp_server::handle_multicast, this, counter, endpoints.size(), _1, _2));
 		}
 	}
 

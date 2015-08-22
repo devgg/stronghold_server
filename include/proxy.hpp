@@ -12,11 +12,11 @@
 #include "relay.hpp"
 #include "mediator.hpp"
 #include "listener.hpp"
-#include "gateway.hpp"
+#include "network_gateway.hpp"
 #include <memory>
 
 namespace communication {
-    
+    /*
     class proxy: public virtual mediator, virtual public relay {
     public:
         proxy() {}
@@ -30,7 +30,7 @@ namespace communication {
         std::weak_ptr<gateway> gateway;
         std::weak_ptr<listener> listener;
         
-    };
+    };*/
     
 }
 

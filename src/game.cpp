@@ -10,7 +10,7 @@
 #include <iostream>
 
 namespace game {
-    
+    /*
     auto game::key_event(constants::key key, constants::event event, communication::client c) -> void {
         proxy->key_event(key, event, c);
     }
@@ -27,5 +27,5 @@ namespace game {
         players.erase(c);
         
 //        std::cout << "Player " << p.get_username() << " disconnected" << std::endl;
-    }
+    }*/
 }

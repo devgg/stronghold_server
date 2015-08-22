@@ -15,7 +15,7 @@
 #include <map>
 
 namespace game {
-    
+    /*
     class game: public virtual communication::listener {
     public:
         game(std::shared_ptr<communication::proxy> proxy): proxy(proxy) {}
@@ -27,7 +27,7 @@ namespace game {
         std::shared_ptr<communication::proxy> proxy;
         std::map<communication::client, player> players;
     };
-    
+    */
 }
 
 #endif /* defined(__stronghold_server__game__) */

@@ -127,6 +127,7 @@
 
 #include "object_pool.hpp"
 #include "udp_server.hpp"
+#include "network_controller_server.hpp"
 
 
 namespace communication{

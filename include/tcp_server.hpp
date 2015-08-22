@@ -15,7 +15,6 @@
 #include <memory>
 
 #include "tcp_connection.hpp"
-#include "gateway.hpp"
 #include "relay.hpp"
 
 
