@@ -9,10 +9,6 @@
 #ifndef __stronghold_server__udp_server__
 #define __stronghold_server__udp_server__
 
-#include <string>
-#include <boost/array.hpp>
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/asio.hpp>
 #include <map>
 #include <atomic>
@@ -38,7 +34,7 @@ namespace communication {
         
         void receive_session();
         void handle_receive(const boost::shared_ptr<udp_session>& session, const boost::system::error_code& ec, std::size_t bytes_transferred);
-        void enqueue_response(boost::shared_ptr<udp_session> const& session, std::vector<unsigned char> bytes);
+        void enqueue_response(boost::shared_ptr<udp_session> const& session, const std::vector<unsigned char>& bytes);
     };
     
 }

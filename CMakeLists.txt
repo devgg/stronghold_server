@@ -10,7 +10,6 @@ file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
 add_executable(stronghold_server ${SOURCES} ${INCLUDES})
 
 
-
 set (EXTRA_COMPILE_FLAGS "-Wall -Werror")
 
 include(CheckCXXCompilerFlag)
@@ -48,9 +47,9 @@ find_package(Boost 1.55 REQUIRED system)
 
 #### import ####
 target_include_directories(stronghold_server PRIVATE 
-    	${INCLUDE_DIR}
-	${STRONGHOLD_SHARED_INCLUDE_DIR}
-	${Boost_INCLUDE_DIRS}
+    ${INCLUDE_DIR}
+    ${STRONGHOLD_SHARED_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS}
 )
 target_link_libraries(stronghold_server 
 	stronghold_shared

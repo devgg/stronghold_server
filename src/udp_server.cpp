@@ -9,12 +9,10 @@
 #include <boost/range/adaptor/map.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
 #include <boost/asio.hpp>
 #include <memory>
-#include <iostream>
 
 #include "udp_session.hpp"
 #include "udp_server.hpp"
@@ -28,7 +26,7 @@ namespace communication {
     
     
     udp_server::udp_server(boost::asio::io_service& io_service, std::shared_ptr<communication::relay> relay):
-    socket_(io_service, udp::endpoint(udp::v4(), 1337)), strand_(io_service), relay(relay) {
+    socket_(io_service, udp::endpoint(udp::v4(), 1337)), strand_(io_service), relay(relay), counter(100) {
         receive_session();
         
         sessions = std::map<boost::shared_ptr<udp_session>, client,
@@ -56,7 +54,7 @@ namespace communication {
             current_session = session_iter->first;
             session->client = current_session->client;
         } else {
-            client c(counter++ + 100);
+            client c(counter++);
             sessions[session] = c;
             session->client = c;
         }
@@ -69,8 +67,13 @@ namespace communication {
         receive_session();
     }
     
-    void udp_server::enqueue_response(boost::shared_ptr<udp_session> const& session, std::vector<unsigned char> bytes) {
-        socket_.async_send_to(boost::asio::buffer(bytes), session->remote_endpoint_, bind(&udp_session::handle_sent, session, _1, _2));
+    void udp_server::enqueue_response(boost::shared_ptr<udp_session> const& session, const std::vector<unsigned char>& bytes) {
+		std::vector<unsigned char>* bytes2 = new std::vector<unsigned char>();
+		for (int i = 0; i < bytes.size(); i++) {
+			bytes2->push_back(bytes[i]);
+		}
+
+        socket_.async_send_to(boost::asio::buffer(*bytes2), session->remote_endpoint_, bind(&udp_session::handle_sent, session, _1, _2));
     }
     
     void udp_server::send(std::shared_ptr<msg::message> message, client c) {
@@ -82,7 +85,7 @@ namespace communication {
     }
     
     void udp_server::broadcast(std::shared_ptr<msg::message> message) {
-        auto bytes = serializer::serialize(message);
+		std::vector<unsigned char> bytes = serializer::serialize(message);
         for(auto&& session : sessions | boost::adaptors::map_keys) {
             enqueue_response(session, bytes);
         }

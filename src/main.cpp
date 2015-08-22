@@ -131,6 +131,7 @@
 #include "proxy.hpp"
 #include "game.hpp"
 #include "udp_server.hpp"
+#include "udp_server2.hpp"
 
 
 int main() {
@@ -156,21 +157,34 @@ int main() {
 //        std::cerr << e.what() << std::endl;
 //    }
     
-    try {
-        boost::asio::io_service io_service;
-        
-        std::shared_ptr<com::proxy> proxy = std::make_shared<com::proxy>();
-        std::shared_ptr<com::udp_server> server = std::make_shared<com::udp_server>(io_service, proxy);
-        std::shared_ptr<game::game> game = std::make_shared<game::game>(proxy);
-        proxy->set_gateway(server);
-        proxy->set_listener(game);
-        
-        
-        io_service.run();
-        
-    } catch (std::exception& e) {
-        std::cerr << e.what() << std::endl;
-    }
+//    try {
+//        boost::asio::io_service io_service;
+//        
+//        std::shared_ptr<com::proxy> proxy = std::make_shared<com::proxy>();
+//        std::shared_ptr<com::udp_server> server = std::make_shared<com::udp_server>(io_service, proxy);
+//        std::shared_ptr<game::game> game = std::make_shared<game::game>(proxy);
+//        proxy->set_gateway(server);
+//        proxy->set_listener(game);
+//        
+//        
+//        io_service.run();
+//        
+//    } catch (std::exception& e) {
+//        std::cerr << e.what() << std::endl;
+//    }
+
+	try {
+		boost::asio::io_service io_service;
+
+		com::udp_server2 server(io_service);
+
+
+		io_service.run();
+
+	}
+	catch (std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
 
     
 //    try {
