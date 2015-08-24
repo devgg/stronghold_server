@@ -9,8 +9,6 @@
 #ifndef __stronghold_server__game__
 #define __stronghold_server__game__
 
-#include "proxy.hpp"
-#include "listener.hpp"
 #include "player.hpp"
 #include <map>
 

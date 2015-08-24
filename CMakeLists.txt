@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(stronghold_server CXX)
 
+
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(INCLUDE_DIRS ${INCLUDE_DIR} ${INCLUDE_DIR}/communication)
 set(SOURCE_DIR 	${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-file(GLOB INCLUDES ${INCLUDE_DIR}/*.hpp)
-file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
+file(GLOB_RECURSE INCLUDES ${INCLUDE_DIR}/*.hpp)
+file(GLOB_RECURSE SOURCES ${SOURCE_DIR}/*.cpp)
  
 add_executable(stronghold_server ${SOURCES} ${INCLUDES})
 
@@ -39,6 +41,8 @@ add_subdirectory(libs/shared)
 
 
 ##### boost #####
+add_definitions(-DBOOST_ALL_NO_LIB)
+add_definitions(-DBOOST_ALL_DYN_LINK)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.55 REQUIRED system)
@@ -47,12 +51,12 @@ find_package(Boost 1.55 REQUIRED system)
 
 #### import ####
 target_include_directories(stronghold_server PRIVATE 
-    ${INCLUDE_DIR}
-    ${STRONGHOLD_SHARED_INCLUDE_DIR}
+    ${INCLUDE_DIRS}
+    ${STRONGHOLD_SHARED_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
 )
 target_link_libraries(stronghold_server 
-	stronghold_shared
+	${STRONGHOLD_SHARED_LIBRARIES}
 	${Boost_LIBRARIES}
 )
 ### \import ####

@@ -125,9 +125,7 @@
 #include <iostream>
 #include <boost/asio.hpp>
 
-#include "object_pool.hpp"
-#include "udp_server.hpp"
-#include "network_controller_server.hpp"
+#include "network_gateway_udp.hpp"
 
 
 namespace communication{
@@ -174,12 +172,8 @@ int main() {
 //    }
 
 	try {
-		boost::asio::io_service io_service;
-		std::shared_ptr<object_pool<boost::asio::streambuf>> streambuffer_pool = std::make_shared<object_pool<boost::asio::streambuf>>(100);
-		communication::udp_server udp_server(io_service, streambuffer_pool, 1337, 1338);
-
-
-		io_service.run();
+		std::shared_ptr<communication::network_gateway_udp> network_gateway = std::make_shared<communication::network_gateway_udp>(1337, 1338);
+		network_gateway->run();
 	}
 	catch (std::exception& e) {
 		std::cerr << e.what() << std::endl;
