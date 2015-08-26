@@ -13,40 +13,42 @@ namespace communication {
 		socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(host), port)),
 		streambuffer_pool(streambuffer_pool) {}
 
-	void udp_sender::send(boost::asio::streambuf* streambuf, const boost::asio::ip::udp::endpoint& endpoint) {
-		socket.async_send_to(streambuf->data(), endpoint, boost::bind(&udp_sender::handle_unicast, this, _1, _2));
+	void udp_sender::send(boost::asio::streambuf* streambuf, const boost::asio::ip::udp::endpoint* endpoint) {
+		socket.async_send_to(streambuf->data(), *endpoint, boost::bind(&udp_sender::handle_unicast, this, streambuf, _1, _2));
 	}
 
-	void udp_sender::send(boost::asio::streambuf* streambuf, const std::vector<boost::asio::ip::udp::endpoint>& endpoints) {
+	void udp_sender::send(boost::asio::streambuf* streambuf, const std::vector<boost::asio::ip::udp::endpoint*> endpoints) {
 		std::atomic<size_t>* counter = new std::atomic<size_t>(0);
-		for (const boost::asio::ip::udp::endpoint& endpoint : endpoints) {
-			socket.async_send_to(streambuf->data(), endpoint, boost::bind(&udp_sender::handle_multicast, this, counter, endpoints.size(), _1, _2));
+		for (const boost::asio::ip::udp::endpoint* endpoint : endpoints) {
+			socket.async_send_to(streambuf->data(), *endpoint, boost::bind(&udp_sender::handle_multicast, this, streambuf, counter, endpoints.size(), _1, _2));
 		}
 	}
 
 
-	void udp_sender::handle_unicast(const boost::system::error_code& error, std::size_t bytes_transferred) {
+	void udp_sender::handle_unicast(boost::asio::streambuf* streambuf, const boost::system::error_code& error, std::size_t bytes_transferred) {
 		if (!error) {
 
 			//        std::cout << "bytes: " << bytes_transferred << std::endl;
-		}
-		else {
+		} else {
 			std::cout << "error during write [" << error.message() << "]" << std::endl;
 		}
+		streambuffer_pool->push(streambuf);
 	}
 
-	void udp_sender::handle_multicast(std::atomic<size_t>* counter, size_t num_endpoints, const boost::system::error_code& error, std::size_t bytes_transferred) {
+	void udp_sender::handle_multicast(boost::asio::streambuf* streambuf, std::atomic<size_t>* counter, size_t num_endpoints, const boost::system::error_code& error, std::size_t bytes_transferred) {
 		if (!error) {
 
 			//        std::cout << "bytes: " << bytes_transferred << std::endl;
-		}
-		else {
+		} else {
 			std::cout << "error during write [" << error.message() << "]" << std::endl;
 		}
-		(*counter)++;
+		++(*counter);
 		if (*counter == num_endpoints) {
 			// release streambuf back in pool
 			delete counter;
 		}
+		streambuffer_pool->push(streambuf);
 	}
+
+
 }

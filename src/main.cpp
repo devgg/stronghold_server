@@ -126,11 +126,8 @@
 #include <boost/asio.hpp>
 
 #include "network_gateway_udp.hpp"
+#include "message_controller.hpp"
 
-
-namespace communication{
-	class udp_receiver;
-}
 
 int main() {
     
@@ -173,7 +170,9 @@ int main() {
 
 	try {
 		std::shared_ptr<communication::network_gateway_udp> network_gateway = std::make_shared<communication::network_gateway_udp>(1337, 1338);
+		communication::message_controller message_controller(network_gateway);
 		network_gateway->run();
+
 	}
 	catch (std::exception& e) {
 		std::cerr << e.what() << std::endl;

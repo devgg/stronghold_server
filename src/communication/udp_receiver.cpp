@@ -5,28 +5,26 @@
 
 namespace communication {
 
-	udp_receiver::udp_receiver(boost::asio::io_service& io_service, std::shared_ptr<object_pool<boost::asio::streambuf>> streambuffer_pool, unsigned short port) :
+	udp_receiver::udp_receiver(network_gateway<false>* gateway, boost::asio::io_service& io_service, std::shared_ptr<object_pool<boost::asio::streambuf>> streambuffer_pool, unsigned short port) :
 		socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port)),
-		streambuffer_pool(streambuffer_pool) {
-		receive();
-	}
+		streambuffer_pool(streambuffer_pool), gateway(gateway) {}
 
-	udp_receiver::udp_receiver(boost::asio::io_service& io_service, std::shared_ptr<object_pool<boost::asio::streambuf>> streambuffer_pool, std::string host, unsigned short port) :
+	udp_receiver::udp_receiver(network_gateway<false>* gateway, boost::asio::io_service& io_service, std::shared_ptr<object_pool<boost::asio::streambuf>> streambuffer_pool, std::string host, unsigned short port) :
 		socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(host), port)),
-		streambuffer_pool(streambuffer_pool) {
-		receive();
-	}
+		streambuffer_pool(streambuffer_pool), gateway(gateway) {}
 
 	void udp_receiver::receive() {
 		boost::asio::streambuf* streambuf = streambuffer_pool->pop();
-		socket.async_receive_from(streambuf->prepare(1000), receive_endpoint, boost::bind(&udp_receiver::handle_receive, this, streambuf, _1, _2));
+		boost::asio::ip::udp::endpoint* endpoint = endpoint_pool->pop();
+		socket.async_receive_from(streambuf->prepare(1000), *endpoint, boost::bind(&udp_receiver::handle_receive, this, streambuf, endpoint, _1, _2));
 	}
 
-	void udp_receiver::handle_receive(boost::asio::streambuf* streambuf, const boost::system::error_code& error, std::size_t bytes_transferred) {
+
+	void udp_receiver::handle_receive(boost::asio::streambuf* streambuf, boost::asio::ip::udp::endpoint* endpoint, const boost::system::error_code& error, size_t bytes_transferred) {
 		if (!error) {
 			std::cout << "read [bytes '" << bytes_transferred << "', #streambuffer '" << streambuffer_pool->num_available_objects() << "']" << std::endl;
-			streambuf->commit(14);
-			streambuffer_pool->push(streambuf);
+			streambuf->commit(bytes_transferred);
+			gateway->receive(streambuf, endpoint);
 			//			boost::asio::buffers_begin(receive_buffer);
 		}
 		else if ((boost::asio::error::connection_reset == error) || (boost::asio::error::eof == error)) {
@@ -37,4 +35,9 @@ namespace communication {
 		}
 		receive();
 	}
+
+	void udp_receiver::set_endpoint_pool(std::shared_ptr<object_pool<boost::asio::ip::udp::endpoint>> endpoint_pool) {
+		this->endpoint_pool = endpoint_pool;
+	}
 }
+

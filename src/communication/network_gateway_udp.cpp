@@ -9,7 +9,7 @@ namespace communication {
 
 	network_gateway_udp::network_gateway_udp(unsigned short receive_port, unsigned short send_port) :
 		streambuffer_pool(std::make_shared<object_pool<boost::asio::streambuf>>(100)),
-		udp_receiver(io_service, streambuffer_pool, receive_port),
+		udp_receiver(this, io_service, streambuffer_pool, receive_port),
 		udp_sender(io_service, streambuffer_pool, send_port) {}
 
 	boost::asio::streambuf* network_gateway_udp::serialize_message(message::message* message) {
@@ -18,26 +18,28 @@ namespace communication {
 		return streambuf;
 	}
 
-	void network_gateway_udp::receive(boost::asio::streambuf* streambuf) {
+	void network_gateway_udp::receive(boost::asio::streambuf* streambuf, boost::asio::ip::udp::endpoint* endpoint) {
 		message::message* message = deserializer::deserialize(streambuf);
 		streambuffer_pool->push(streambuf);
-		listener->receive(message);
+		listener->receive(message, endpoint);
 	}
 
-	void network_gateway_udp::send(message::message* message, const boost::asio::ip::udp::endpoint& endpoint) {
+	void network_gateway_udp::send(message::message* message, const boost::asio::ip::udp::endpoint* endpoint)  {
 		udp_sender.send(serialize_message(message), endpoint);
 	}
 
-	void network_gateway_udp::send(message::message* message, const std::vector<boost::asio::ip::udp::endpoint>& endpoints) {
+	void network_gateway_udp::send(message::message* message, const std::vector<boost::asio::ip::udp::endpoint*> endpoints) {
 		udp_sender.send(serialize_message(message), endpoints);
 	}
 
-	void network_gateway_udp::set_listener(std::shared_ptr<network_listener> listener) {
+	void network_gateway_udp::set_listener(network_listener* listener) {
 		this->listener = listener;
+		udp_receiver.set_endpoint_pool(listener->get_endpoint_pool());
 	}
 
 	void network_gateway_udp::run() {
 		if (listener) {
+			udp_receiver.receive();
 			io_service.run();
 		} else {
 			std::cout << "error [listener not set]" << std::endl;

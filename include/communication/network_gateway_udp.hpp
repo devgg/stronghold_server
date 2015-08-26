@@ -16,18 +16,18 @@ namespace communication {
 
 		udp_receiver udp_receiver;
 		udp_sender udp_sender;
-		std::shared_ptr<network_listener> listener = nullptr;
+		network_listener* listener = nullptr;
 
 		boost::asio::streambuf* serialize_message(message::message* message);
 
 	public:
 		network_gateway_udp(unsigned short receive_port, unsigned short send_port);
 
-		virtual void receive(boost::asio::streambuf* streambuf) override;
-		virtual void send(message::message* message, const boost::asio::ip::udp::endpoint& endpoint) override;
-		virtual void send(message::message* message, const std::vector<boost::asio::ip::udp::endpoint>& endpoints) override;
+		virtual void receive(boost::asio::streambuf* streambuf, boost::asio::ip::udp::endpoint* endpoint) override;
+		virtual void send(message::message* message, const boost::asio::ip::udp::endpoint* endpoint) override;
+		virtual void send(message::message* message, const std::vector<boost::asio::ip::udp::endpoint*> endpoints) override;
 
-		virtual void set_listener(std::shared_ptr<network_listener> listener) override;
+		virtual void set_listener(network_listener* listener) override;
 		virtual void run() override;
 	};
 }
